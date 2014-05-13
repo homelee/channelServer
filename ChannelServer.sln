@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelServer", "ChannelSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tool", "Tool\Tool.csproj", "{E20D123A-4A2B-4E09-AADB-D309312E0C23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelCom", "ChannelCom\ChannelCom.csproj", "{C79B4F6D-8616-47AD-9DA0-6DACB528A7BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E20D123A-4A2B-4E09-AADB-D309312E0C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20D123A-4A2B-4E09-AADB-D309312E0C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20D123A-4A2B-4E09-AADB-D309312E0C23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C79B4F6D-8616-47AD-9DA0-6DACB528A7BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C79B4F6D-8616-47AD-9DA0-6DACB528A7BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C79B4F6D-8616-47AD-9DA0-6DACB528A7BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C79B4F6D-8616-47AD-9DA0-6DACB528A7BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

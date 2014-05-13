@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Tool
+namespace ChannelCom
 {
     [Serializable]
     [DataContract]
@@ -29,6 +26,8 @@ namespace Tool
         [DataMember]
         public DateTime UpdateTime { get; set; }
 
+        public string Comments { get; set; }
+
         [DataMember]
         public string Guid { get; set; }
         [DataMember]
@@ -49,7 +48,7 @@ namespace Tool
         [DataMember]
         public string Url { get; set; }
         [DataMember]
-        public string Height { get; set; }
+        public int Height { get; set; }
         [DataMember]
         public int Width { get; set; }
     }
