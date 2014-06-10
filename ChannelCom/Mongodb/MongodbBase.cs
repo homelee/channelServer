@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using ChannelCom.Model;
 using MongoDB.Driver;
 
 namespace ChannelCom.Mongodb
@@ -11,25 +12,14 @@ namespace ChannelCom.Mongodb
         static MongoDatabase Getdatabase()
         {
             var mongoUrl = new MongoUrl(MongoDbConn);
-            var mongoClient = new MongoClient(mongoUrl);
-
-
+            var mongoClient = new MongoClient(mongoUrl); 
             return mongoClient.GetServer().GetDatabase(mongoUrl.DatabaseName);
-
         }
 
-
-        public static MongoCollection GetCollection()
+        public static MongoCollection GetCollection(EnumMongodbCollection collectionName)
         {
             var database = Getdatabase();
-            return database.GetCollection<ChannelModel>("MediaInfo");
+            return database.GetCollection<MediaModel>(collectionName.ToString());
         }
-
-
-
-
-
-
-
     }
 }

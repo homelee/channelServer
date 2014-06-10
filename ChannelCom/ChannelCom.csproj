@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
@@ -47,12 +50,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChannelModel.cs" />
+    <Compile Include="Model\EnumChannelStatus.cs" />
+    <Compile Include="Model\EnumMongodbCollection.cs" />
+    <Compile Include="Unity\ChannelCommon.cs" />
+    <Compile Include="Model\ChannelModel.cs" />
+    <Compile Include="Model\MediaModel.cs" />
+    <Compile Include="Model\MediaType.cs" />
     <Compile Include="Mongodb\MongodbBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\ChannelDal.cs" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UnityCommon\UnityCommon.csproj">
+      <Project>{e2604649-4a3b-47e1-a9ae-1b1106943824}</Project>
+      <Name>UnityCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

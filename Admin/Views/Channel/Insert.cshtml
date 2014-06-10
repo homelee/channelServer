@@ -1,0 +1,41 @@
+﻿@model ChannelCom.Model.ChannelModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr/> 
+        <br />  CateId:<input type="text" id="CateId" name="CateId" value="" />
+        <select>
+            <option></option>
+        </select>
+        <br />
+        <br />  Name:<input type="text" id="Name" name="Name" value="" />
+        <br />
+        <br />  Description:<input type="text" id="Description" name="Description" value="" />
+        <br />
+        <br />  Image:<input type="text" id="Image" name="Image" value="" />
+        <br />
+        <br />  CreateTime:<input type="text" id="CreateTime" name="CreateTime" value="" />
+        <br />
+        <br />  UpdateTime:<input type="text" id="UpdateTime" name="UpdateTime" value="" />
+       
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

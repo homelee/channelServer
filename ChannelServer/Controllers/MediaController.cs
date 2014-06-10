@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ChannelCom;
+using ChannelCom.Model;
 using ChannelCom.Mongodb;
 using MongoDB.Driver.Linq;
 
@@ -12,8 +13,6 @@ namespace ChannelServer.Controllers
 {
     public class MediaController : ApiController
     {
-     
-
         [HttpGet]
         //[ApiAuthorizeAttribute(AllowAnonymous = true)]
         public HttpResponseMessage List(int page, int page_item, Guid id)
@@ -22,18 +21,15 @@ namespace ChannelServer.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
-         [HttpGet]
+        [HttpGet]
         public HttpResponseMessage Home()
         {
-            var collection = MongoBase.GetCollection();
+            var collection = MongoBase.GetCollection(EnumMongodbCollection.Cate);
 
-            var dictword = collection.AsQueryable<ChannelModel>().Take(50).ToList();
-             
+            var dictword = collection.AsQueryable<MediaModel>().Take(50).ToList();
 
             return Request.CreateResponse(HttpStatusCode.OK, dictword);
-        }
-
-
+        } 
 
         // public string Get(int id)
         //{

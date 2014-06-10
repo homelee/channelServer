@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ChannelCom
+namespace ChannelCom.Model
 {
     [Serializable]
     [DataContract]
-    public class ChannelModel
+    public class MediaModel
     {
         [BsonId]
         [DataMember]
@@ -15,6 +15,10 @@ namespace ChannelCom
 
         [DataMember]
         public string Title { get; set; }
+
+        [DataMember] 
+        public string ChannelId { get; set; }
+
         [DataMember]
         public string Description { get; set; }
 
@@ -23,32 +27,39 @@ namespace ChannelCom
 
         [DataMember]
         public DateTime CreateTime { get; set; }
+
         [DataMember]
         public DateTime UpdateTime { get; set; }
 
+        [DataMember]
         public string Comments { get; set; }
 
         [DataMember]
         public string Guid { get; set; }
+
         [DataMember]
         public List<ImageContent> Images { get; set; }
+
         [DataMember]
         public List<VideoContent> Videos { get; set; }
 
         [DataMember]
         public List<string> Authors { get; set; }
+
         [DataMember]
         public List<string> Categorys { get; set; }
     }
-    
+
     [Serializable]
     [DataContract]
     public class ImageContent
     {
         [DataMember]
         public string Url { get; set; }
+
         [DataMember]
         public int Height { get; set; }
+
         [DataMember]
         public int Width { get; set; }
     }
@@ -59,12 +70,15 @@ namespace ChannelCom
     {
         [DataMember]
         public string Url { get; set; }
+
         [DataMember]
-        public string Size { get; set; }
+        public long Size { get; set; }
+
         [DataMember]
         public string Type { get; set; }
+
         [DataMember]
-        public int Duration { get; set; }
+        public long Duration { get; set; }
     }
 }
 

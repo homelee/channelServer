@@ -1,0 +1,59 @@
+﻿@using System.Configuration
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - 后台</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @*@StackExchange.Profiling.MiniProfiler.RenderIncludes()*@
+
+    <style>
+        li {
+            line-height: 30px;
+        }
+    </style>
+    <base target="_blank">
+
+</head>
+<body> 
+    <div class="float-left left">
+        <ul>
+            <li>
+                <a href="@Url.Action("Index", "Channel")" >
+                    Channel List
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Add", "Channel")"  >
+                    add Channel
+                </a>
+            </li> 
+            <li>
+                <a href="@Url.Action("Insert", "Cate")">
+                      cate
+                </a>
+            </li> 
+        </ul>
+        <br /> 
+    </div>
+
+    <div class="float-left right"> 
+        @RenderSection("featured", required: false)
+        <section>
+            @RenderBody()
+        </section>
+    </div>
+    
+    <footer class="modal-footer" style="clear:both"> 
+            <div class="float-left">
+                <p>现在时间： @DateTime.Now </p>
+            </div> 
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery") 
+</body>
+</html>
