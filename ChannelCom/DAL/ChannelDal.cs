@@ -18,6 +18,11 @@ namespace ChannelCom.DAL
     {
         private static readonly MongoCollection Collection = Mongodb.MongoBase.GetCollection(EnumMongodbCollection.Channel);
 
+        public static List<ChannelModel> List()
+        {
+            var list = Collection.AsQueryable<ChannelModel>().Where(n => n.Status != EnumChannelStatus.Delete && n.Status != EnumChannelStatus.Hidden).ToList();
+            return list;
+        }
 
         public static ChannelModel Get(string key, EnumChannelQueryKey type)
         {
@@ -29,12 +34,12 @@ namespace ChannelCom.DAL
                 case EnumChannelQueryKey.Id:
                     channel = query.FirstOrDefault(n => n.Id == ObjectId.Parse(key));
                     break;
-               case EnumChannelQueryKey.LinkName:
+                case EnumChannelQueryKey.LinkName:
                     channel = query.FirstOrDefault(n => n.LinkName == key);
-                    break;  
+                    break;
                 case EnumChannelQueryKey.ParentId:
                     channel = query.FirstOrDefault(n => n.ParentId == key);
-                    break;  
+                    break;
                 case EnumChannelQueryKey.Name:
                     channel = query.FirstOrDefault(n => n.Name == key);
                     break;
@@ -42,11 +47,10 @@ namespace ChannelCom.DAL
                     channel = null;
                     break;
             }
-             
+
             return channel;
         }
 
-    
         public static void DeleteChannel(string channelId)
         {
             var query = Query.EQ("_id", ObjectId.Parse(channelId));
@@ -119,7 +123,7 @@ namespace ChannelCom.DAL
         //        }
         //    }
 
-             
+
         //    if (!string.IsNullOrEmpty(channel.CateId)) update.Set(u => u.CateId, channelId);
         //    if (!string.IsNullOrEmpty(channel.Description)) update.Set(u => u.Description, channel.Description);
         //    if (!string.IsNullOrEmpty(channel.Image)) update.Set(u => u.Image, channel.Image);

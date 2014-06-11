@@ -11,7 +11,7 @@ using MongoDB.Driver.Linq;
 
 namespace ChannelServer.Controllers
 {
-    public class MediaController : ApiController
+    public class MediaController : ApiBaseController
     {
         [HttpGet]
         //[ApiAuthorizeAttribute(AllowAnonymous = true)]

@@ -38,7 +38,7 @@ namespace Tool
                 var category = item.Descendants("category").Select(u => u.Value);
                 var videosElement = item.Descendants(media + "content");
                 var imagesElement = item.Descendants(media + "thumbnail");
-                 
+
                 var videos = videosElement.Select(el => new VideoContent()
                 {
                     Duration = el.Attribute("duration") == null ? 0 : long.Parse(el.Attribute("duration").Value),
@@ -46,7 +46,7 @@ namespace Tool
                     Size = el.Attribute("fileSize") == null ? 0 : long.Parse(el.Attribute("fileSize").Value),
                     Type = el.Attribute("type").Value,
                 }).ToList();
- 
+
                 var images = imagesElement.Select(el => new ImageContent()
                 {
                     Height = int.Parse(el.Attribute("height").Value),
@@ -55,31 +55,33 @@ namespace Tool
                 }).ToList();
 
 
-                var link = item.Element("link").Value;
+                var link = item.Element("link").Value; 
+                if (link.Contains("http://channel9.msdn.com/coding4fun"))
+                {
+                    continue;
+                }
 
                 var channel = ChannelCommon.GetChannelIdByLink(link);
 
-                if (channel != null)
+
+                list.Add(new MediaModel
                 {
-                    list.Add(new MediaModel 
-                    {
-                        Id = Guid.NewGuid().ToString().ToLower(),
-                        Title = item.Element("title").Value,
-                        Description = item.Element("description").Value,
-                        ChannelId = channel != null ? channel.Id.ToString() : null,
-                        Link = link,
-                        Guid = item.Element("guid").Value,
-                        Comments = "",
-                        Categorys = category.ToList(),
-                        Videos = videos,
-                        Images = images,
-                        Authors = item.Descendants(itunes + "author").Select(u => u.Value).ToList()[0].Split(',').Select(u => u.Trim()).ToList(),
-                        UpdateTime = DateTime.UtcNow,
-                        CreateTime = Convert.ToDateTime(item.Element("pubDate").Value).ToUniversalTime(),
-                    });
-                } 
+                    Title = item.Element("title").Value,
+                    Description = item.Element("description").Value,
+                    ChannelId = channel != null ? channel.Id.ToString() : null,
+                    Link = link,
+                    Guid = item.Element("guid").Value,
+                    Comments = "",
+                    Categorys = category.ToList(),
+                    Videos = videos,
+                    Images = images,
+                    Authors = item.Descendants(itunes + "author").Select(u => u.Value).ToList()[0].Split(',').Select(u => u.Trim()).ToList(),
+                    UpdateTime = DateTime.UtcNow,
+                    CreateTime = Convert.ToDateTime(item.Element("pubDate").Value).ToUniversalTime(),
+                });
+
             }
-             
+
             var collection = MongoBase.GetCollection(EnumMongodbCollection.Medias);
 
             foreach (var item in list)

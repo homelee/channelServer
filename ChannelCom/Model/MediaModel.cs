@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ChannelCom.Model
@@ -11,7 +12,7 @@ namespace ChannelCom.Model
     {
         [BsonId]
         [DataMember]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [DataMember]
         public string Title { get; set; }

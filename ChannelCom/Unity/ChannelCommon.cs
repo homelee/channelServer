@@ -11,7 +11,7 @@ namespace ChannelCom.Unity
 {
     public class ChannelCommon
     {
-        static Tuple<string, string, string> GetInfoByLink(string link)
+        static Tuple<string, string, string, string> GetInfoByLink(string link)
         {
             //http://channel9.msdn.com/Blogs/DevRadio/标题
             //http://channel9.msdn.com/Shows/Cloud+Cover/标题
@@ -23,6 +23,7 @@ namespace ChannelCom.Unity
 
             link = link.Replace("http://", "").ToLower();
 
+            var type = "";
             var cateLinkName = "";
             var channelLinkName = "";
             var title = "";
@@ -31,13 +32,15 @@ namespace ChannelCom.Unity
             if (link.Contains("channel9.msdn.com/Blogs/".ToLower()) || link.Contains("channel9.msdn.com/Series/".ToLower()) || link.Contains("channel9.msdn.com/Shows/".ToLower()))
             {
                 var array = link.Split('/').ToList();
-                cateLinkName = array[1];
+                type = array[1];
                 channelLinkName = array[2];
                 title = array[3];
+                cateLinkName = "";
             }
             else if (link.Contains("channel9.msdn.com/Events/".ToLower()))
             {
                 var array = link.Split('/').ToList();
+                type = array[1];
                 cateLinkName = array[2];
                 channelLinkName = array[3];
                 title = array[4];
@@ -48,7 +51,7 @@ namespace ChannelCom.Unity
                 Thread.Sleep(33000);
             }
 
-            var tups = new Tuple<string, string, string>(cateLinkName, channelLinkName, title);
+            var tups = new Tuple<string, string, string, string>(type, channelLinkName, title, cateLinkName);
 
             return tups;
         }
@@ -64,22 +67,23 @@ namespace ChannelCom.Unity
             //http://channel9.msdn.com/Events/dotnetConf/2014/The-State-of-NET
 
             link = link.ToLower();
-            return link.Substring(0, link.Length - link.LastIndexOf('/'));
+            return link.Substring(0, link.LastIndexOf('/'));
         }
-         
+
         public static ChannelModel GetChannelIdByLink(string link)
         {
             var info = GetInfoByLink(link);
 
-            if (info == new Tuple<string, string, string>("", "", "") || string.IsNullOrEmpty(info.Item2) || string.IsNullOrEmpty(info.Item3))
+            if (info == new Tuple<string, string, string, string>("", "", "", "") || string.IsNullOrEmpty(info.Item2) || string.IsNullOrEmpty(info.Item3))
             {
                 return null;
             }
-            var cateLinkName = info.Item1;
+            var type = info.Item1;
             var channelLinkName = info.Item2;
             var title = info.Item3;
+            var cateLinkName = info.Item4;
 
-            ChannelModel channel = ChannelDal.Get(channelLinkName, EnumChannelQueryKey.LinkName);
+            ChannelModel channel = ChannelDal.Get(GetChannelInfoByLink(link, false).link, EnumChannelQueryKey.LinkName);
 
             if (channel == null)
             {
@@ -94,8 +98,8 @@ namespace ChannelCom.Unity
                         UpdateTime = DateTime.Now,
                         Name = channelInfo.title,// info.Item2,
                         Description = channelInfo.descrtiption,// info.Item2, 
-                        Image = "",
-                        LinkName = info.Item2,
+                        Image = channelInfo.image,
+                        LinkName = channelInfo.link,
                         ParentId = null,
                         ParentType = EnumChannelParent.Default,
                         Status = EnumChannelStatus.Normal
@@ -115,14 +119,14 @@ namespace ChannelCom.Unity
                         UpdateTime = DateTime.Now,
                         Name = bigChannelInfo.title,//info.Item2,
                         Description = bigChannelInfo.descrtiption,//info.Item2,
-                        Image = "",
-                        LinkName = info.Item2,
+                        Image = bigChannelInfo.image,
+                        LinkName = bigChannelInfo.link,
                         ParentId = null,
                         ParentType = EnumChannelParent.Events,
                         Status = EnumChannelStatus.Normal
                     });
 
-                    var parentChanenl = ChannelDal.Get(info.Item2, EnumChannelQueryKey.Name);
+                    var parentChanenl = ChannelDal.Get(bigChannelInfo.title, EnumChannelQueryKey.Name);
                     var channelInfo = GetChannelInfoByLink(link, false);
                     ChannelDal.AddChannel(new ChannelModel()
                     {
@@ -130,8 +134,8 @@ namespace ChannelCom.Unity
                         UpdateTime = DateTime.Now,
                         Name = channelInfo.title,// info.Item3,
                         Description = channelInfo.descrtiption,// info.Item3,
-                        Image = "",
-                        LinkName = info.Item3,
+                        Image = channelInfo.image,
+                        LinkName = channelInfo.link,
                         ParentId = parentChanenl.Id.ToString(),
                         ParentType = EnumChannelParent.Events,
                         Status = EnumChannelStatus.Normal
@@ -152,6 +156,10 @@ namespace ChannelCom.Unity
         public static dynamic GetChannelInfoByLink(string link, bool isBigCate)
         {
             link = GetChannelLinkByMediaUrl(link);
+            if (isBigCate)
+            {
+                link = GetChannelLinkByMediaUrl(link);
+            }
 
             dynamic channel = new System.Dynamic.ExpandoObject();
 
@@ -164,15 +172,38 @@ namespace ChannelCom.Unity
             var htmlDoc = new HtmlDocument();
             //doc.DocumentNode. 
             htmlDoc.LoadHtml(html);
-            var headHtml = htmlDoc.DocumentNode.SelectSingleNode(".area-header .item-header");
-            var imageHtml = htmlDoc.DocumentNode.SelectSingleNode("mainHolder showBanner");
-             
+            var headHtml = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='area-header item-header']");
+
+            var imageHtml = "";
+            try
+            {
+                imageHtml = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='mainHolder showBanner']").Attributes["style"]
+                      .Value;
+            }
+            catch (Exception)
+            {
+                imageHtml = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='firstContent text']").InnerHtml;
+            }
+
+            //catch里面的是Event的内容.所
+
+
             var title = headHtml.SelectSingleNode("h1").InnerText;
-            var description = headHtml.SelectSingleNode("p").InnerText;
-             
+
+            var description = "";
+            try
+            {
+                description = headHtml.SelectSingleNode("p").InnerText;
+            }
+            catch (Exception)
+            {
+                description = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='description']").InnerText;
+            }
+
+            channel.link = link;
             channel.title = title;
             channel.descrtiption = description;
-            channel.image = "";
+            channel.image = RegexCom.ImageUrl(imageHtml);
             return channel;
         }
     }
